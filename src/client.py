@@ -6,20 +6,22 @@ import sys
 
 def client(message):
     info = socket.getaddrinfo('127.0.0.1', 5000)
-    print(info)
     stream_info = [i for i in info if i[1] == socket.SOCK_STREAM][0]
-    print(stream_info)
     client = socket.socket(*stream_info[:3])
     client.connect(stream_info[-1])
     client.sendall(message.encode('utf8'))
-    buffer_length = 40
+    client.shutdown(socket.SHUT_RD)
+    buffer_length = 8
     reply_complete = False
-    string = ""
+    string = " "
     while not reply_complete:
         part = client.recv(buffer_length)
         string = string + part.decode('utf8')
+        print(string)
         if len(part) < buffer_length:
-            reply_complete is True
+            print('.')
+            print(string)
+            reply_complete = True
             client.close()
 
 
