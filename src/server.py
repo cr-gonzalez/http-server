@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+from __future__ import unicode_literals
 import socket
 
 
@@ -12,14 +14,14 @@ def server():
             conn, addr = server.accept()
             buffer_length = 8
             message_complete = False
-            full_string = ""
+            full_string = b""
             while not message_complete:
                 part = conn.recv(buffer_length)
-                full_string = full_string + part.decode('utf8')
+                full_string = full_string + part
                 if len(part) < buffer_length:
                     message_complete = True
-            print(full_string)
-            conn.sendall(full_string.encode('utf8'))
+            print(full_string.decode('utf8'))
+            conn.sendall(full_string)
             conn.close()
             # server.listen(1)
     except KeyboardInterrupt:

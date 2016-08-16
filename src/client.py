@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 
+from __future__ import unicode_literals
 import socket
 import sys
 
@@ -13,12 +14,12 @@ def client(message):
     client.shutdown(socket.SHUT_WR)
     buffer_length = 8
     reply_complete = False
-    string = ""
+    string = b""
     while not reply_complete:
         part = client.recv(buffer_length)
-        string = string + part.decode('utf8')
-        print(string)
+        string = string + part
         if len(part) < buffer_length:
+            print(string.decode('utf8'))
             print('.')
             reply_complete = True
             client.close()
