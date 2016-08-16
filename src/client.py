@@ -10,17 +10,16 @@ def client(message):
     client = socket.socket(*stream_info[:3])
     client.connect(stream_info[-1])
     client.sendall(message.encode('utf8'))
-    client.shutdown(socket.SHUT_RD)
+    client.shutdown(socket.SHUT_WR)
     buffer_length = 8
     reply_complete = False
-    string = " "
+    string = ""
     while not reply_complete:
         part = client.recv(buffer_length)
         string = string + part.decode('utf8')
         print(string)
         if len(part) < buffer_length:
             print('.')
-            print(string)
             reply_complete = True
             client.close()
 

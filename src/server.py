@@ -7,9 +7,9 @@ def server():
     server.bind(address)
     server.listen(1)
     print('starting')
-    conn, addr = server.accept()
     try:
         while True:
+            conn, addr = server.accept()
             buffer_length = 8
             message_complete = False
             full_string = ""
@@ -20,10 +20,9 @@ def server():
                     message_complete = True
             print(full_string)
             conn.sendall(full_string.encode('utf8'))
-            server.listen(1)
-            conn, addr = server.accept()
+            conn.close()
+            # server.listen(1)
     except KeyboardInterrupt:
-        conn.close()
         server.close()
 
 server()
