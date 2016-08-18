@@ -23,9 +23,24 @@ def server():
                 if len(part) < buffer_length:
                     message_complete = True
             print(full_string.decode('utf8'))
+            full_string += b"\r\n\r\n" 
             conn.sendall(full_string)
+            conn.sendall(response_ok())
             conn.close()
     except KeyboardInterrupt:
         server.close()
 
-server()
+
+def response_ok():
+    """Return HTTP 200 OK message for when the connection is ok."""
+    return (b"HTTP/1.1 200 OK\r\n\r\n"
+            b"Success")
+
+
+def response_error():
+    """Return HTTP 500 Internal Server Error for when problems occur."""
+    return (b"HTTP/1.1 500 Internal Server Error\r\n\r\n"
+            b"Error, try again later")
+
+if __name__ == '__main__':
+    server()
