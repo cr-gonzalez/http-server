@@ -6,6 +6,7 @@ import sys
 
 
 def client(message):
+    """Send a message to the server"""
     info = socket.getaddrinfo('127.0.0.1', 5000)
     stream_info = [i for i in info if i[1] == socket.SOCK_STREAM][0]
     client = socket.socket(*stream_info[:3])
@@ -20,7 +21,6 @@ def client(message):
         string = string + part
         if len(part) < buffer_length:
             print(string.decode('utf8'))
-            print('.')
             reply_complete = True
             client.close()
 
