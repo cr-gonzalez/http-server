@@ -12,6 +12,14 @@ MESSAGE_TABLE = [
 ]
 
 
+PARSE_REQUEST_TABLE = [
+    ('PUT / HTTP/1.1', NameError),
+    ('GET / HTTP/2.1', TypeError),
+    ('GET  HTTP/1.1', SyntaxError),
+    ('GET /filepath HTTP/1.1', 'filepath')
+]
+
+
 @pytest.mark.parametrize('value, result', MESSAGE_TABLE)
 def test_client(value, result):
     """Test client."""
@@ -31,3 +39,11 @@ def test_response_error():
     from server import response_error
     error_text = b'HTTP/1.1 500 Internal Server Error'
     assert response_error().split(b'\r\n\r\n')[0] == error_text
+
+
+@pytest.mark.parametrize('value, result', PARSE_REQUEST_TABLE)
+def test_parse_request(value, result):
+    """."""
+    from server import parse_request
+    parse_request(value)
+    assert parse_request(value) == result

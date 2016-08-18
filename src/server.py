@@ -22,7 +22,7 @@ def server():
                 if len(part) < buffer_length:
                     message_complete = True
             print(full_string.decode('utf8'))
-            full_string += b"\r\n\r\n" 
+            full_string += b"\r\n\r\n"
             conn.sendall(full_string)
             conn.sendall(response_ok())
             conn.close()
@@ -40,6 +40,25 @@ def response_error():
     """Return HTTP 500 Internal Server Error for when problems occur."""
     return (b"HTTP/1.1 500 Internal Server Error\r\n\r\n"
             b"Error, try again later")
+
+
+def parse_request(request):
+    """."""
+    lines = request.split('\r\n\r\n')
+    split_request = lines[0].split()
+    print(lines[0])
+    print(split_request)
+    try:
+        method, uri, proto = split_request
+    except ValueError:
+        raise SyntaxError
+    if method != 'GET':
+        raise NameError
+    elif proto != 'HTTP/1.1':
+        raise TypeError
+    print(split_request)
+    return split_request
+
 
 if __name__ == '__main__':
     server()
