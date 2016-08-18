@@ -1,9 +1,11 @@
 # -*- coding:utf-8 -*-
+
 from __future__ import unicode_literals
 import socket
 
 
 def server():
+    """Start running a server, recieve a clients message, and echo it back."""
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
     address = ('127.0.0.1', 5000)
     server.bind(address)
@@ -23,7 +25,6 @@ def server():
             print(full_string.decode('utf8'))
             conn.sendall(full_string)
             conn.close()
-            # server.listen(1)
     except KeyboardInterrupt:
         server.close()
 
