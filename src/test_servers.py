@@ -12,14 +12,6 @@ MESSAGE_TABLE = [
 ]
 
 
-PARSE_REQUEST_TABLE = [
-    ('PUT / HTTP/1.1', NameError),
-    ('GET / HTTP/2.1', TypeError),
-    ('GET  HTTP/1.1', SyntaxError),
-    ('GET /filepath HTTP/1.1', 'filepath')
-]
-
-
 @pytest.mark.parametrize('value, result', MESSAGE_TABLE)
 def test_client(value, result):
     """Test client."""
@@ -41,9 +33,28 @@ def test_response_error():
     assert response_error().split(b'\r\n\r\n')[0] == error_text
 
 
-@pytest.mark.parametrize('value, result', PARSE_REQUEST_TABLE)
-def test_parse_request(value, result):
+def test_parse_request():
     """."""
     from server import parse_request
-    parse_request(value)
-    assert parse_request(value) == result
+    assert parse_request('GET /filepath HTTP/1.1') == '/filepath'
+
+
+def test_parse_nameerror():
+    """."""
+    from server import parse_request
+    with pytest.raises(NameError):
+        parse_request('PUT / HTTP/1.1')
+
+
+def test_parse_typeerror():
+    """."""
+    from server import parse_request
+    with pytest.raises(TypeError):
+        parse_request('GET / HTTP/2.1')
+
+
+def test_parse_syntaxerror():
+    """."""
+    from server import parse_request
+    with pytest.raises(SyntaxError):
+        parse_request('GET  HTTP/1.1')

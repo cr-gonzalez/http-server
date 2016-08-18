@@ -52,12 +52,12 @@ def parse_request(request):
         method, uri, proto = split_request
     except ValueError:
         raise SyntaxError
-    if method != 'GET':
+    if not method == 'GET':
         raise NameError
-    elif proto != 'HTTP/1.1':
+    elif not proto == 'HTTP/1.1':
         raise TypeError
     print(split_request)
-    return split_request
+    return uri
 
 
 if __name__ == '__main__':
