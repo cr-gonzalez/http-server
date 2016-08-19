@@ -20,10 +20,12 @@ def test_client(value, result):
     assert value == result
 
 
-def test_response_ok():
+def test_response_ok(uri):
+    """Test that response_ok returns '200 OK'"""
+    uri = '/filepath'
     """Check that response_ok returns '200 OK'."""
     from server import response_ok
-    assert response_ok().split(b'\r\n\r\n')[0] == b'HTTP/1.1 200 OK'
+    assert response_ok(uri).split(b'\r\n\r\n')[0] == b'HTTP/1.1 /filepath 200 OK'
 
 
 def test_response_error():
@@ -36,7 +38,7 @@ def test_response_error():
 def test_parse_request():
     """."""
     from server import parse_request
-    assert parse_request('GET /filepath HTTP/1.1') == '/filepath'
+    assert parse_request('GET /filepath HTTP/1.1\r\nHost: ') == '/filepath'
 
 
 def test_parse_nameerror():
